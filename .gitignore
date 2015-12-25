@@ -1,0 +1,10 @@
+theos
+.DS_Store
+obj
+_
+.theos
+debs/*
+k
+*.omo
+*.mom
+VersionInfo.plist

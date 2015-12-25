@@ -1,0 +1,7 @@
+#!/bin/bash
+
+echo "Reloading related processes..."
+launchctl kickstart -k system/com.apple.searchd
+launchctl kickstart -k system/com.apple.coreduetd
+launchctl kickstart -k system/com.apple.suggestd
+launchctl kickstart -k system/com.apple.pkd

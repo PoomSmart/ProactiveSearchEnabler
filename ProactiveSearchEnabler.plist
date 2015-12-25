@@ -1,0 +1,17 @@
+{
+	Filter = {
+		Mode = Any;
+		Executables = (
+			searchd,
+			coreduetd,
+			suggestd,
+			pkd
+		);
+		Bundles = (
+			"com.apple.springboard",
+			"com.apple.Preferences",
+			"com.apple.news",
+			"com.apple.Parsec"
+		);
+	};
+}
