@@ -42,12 +42,12 @@ MSHook(Boolean, CFPreferencesGetAppBooleanValue, CFStringRef key, CFStringRef ap
 
 - (id)objectForKey:(NSString *)key
 {
-	if ([key isEqualToString:@"SPLogLevel"])
-		return @(8);
+	/*if ([key isEqualToString:@"SPLogLevel"])
+		return @(8);*/
 	if ([key isEqualToString:@"SpotlightIndexEnabled"])
 		return @(YES);
-	if ([key isEqualToString:@"SPDefaultSearch"])
-		return @(YES);
+	/*if ([key isEqualToString:@"SPDefaultSearch"])
+		return @(YES);*/
 	return %orig;
 }
 
@@ -75,16 +75,16 @@ MSHook(Boolean, CFPreferencesGetAppBooleanValue, CFStringRef key, CFStringRef ap
 
 %group Parsec
 
-%hook PRSSharedParsecSession
+/*%hook PRSSharedParsecSession
 
 - (NSString *)userAgent
 {
-	NSString *r = %orig;
+	NSString *r = [%orig stringByReplacingOccurrencesOfString:@"iPhone4,1" withString:@"iPhone5,1"];
 	NSLog(@"---> %@", r);
 	return r;
 }
 
-%end
+%end*/
 
 %end
 
@@ -113,16 +113,16 @@ MSHook(Boolean, CFPreferencesGetAppBooleanValue, CFStringRef key, CFStringRef ap
 
 %end
 
-%hook CDDCoreData
+/*%hook CDDCoreData
 
 - (NSManagedObjectModel *)model
 {
 	NSManagedObjectModel *orig = %orig;
-	//NSLog(@"%@", orig);
+	NSLog(@"%@", orig);
 	return orig;
 }
 
-%end
+%end*/
 
 %end
 
@@ -144,6 +144,15 @@ MSHook(Boolean, CFPreferencesGetAppBooleanValue, CFStringRef key, CFStringRef ap
 
 %end
 
+%hook _DECDeviceInfo
+
++ (BOOL)_isLowEndHardware
+{
+	return NO;
+}
+
+%end
+
 int (*sandbox_extension_issue_file)(const char *, const char *, int, int);
 MSHook(int, sandbox_extension_issue_file, const char *ext, const char *path, int reserved, int flags)
 {
@@ -153,6 +162,7 @@ MSHook(int, sandbox_extension_issue_file, const char *ext, const char *path, int
 %ctor
 {
 	setSPLogLevel(8);
+	dlopen("/System/Library/PrivateFrameworks/DuetExpertCenter.framework/DuetExpertCenter", RTLD_LAZY);
 	%init;
 	if ([NSBundle.mainBundle.bundleIdentifier isEqualToString:@"com.apple.Preferences"])
 		dlopen("/System/Library/PreferenceBundles/SearchSettings.bundle/SearchSettings", RTLD_LAZY);
@@ -165,21 +175,21 @@ MSHook(int, sandbox_extension_issue_file, const char *ext, const char *path, int
 	}
 	dlopen("/System/Library/Frameworks/WatchKit.framework/WatchKit", RTLD_LAZY);
 	if (%c(SPDeviceConnection)) {
-		NSLog(@"SP on!!");
+		NSLog(@"SP on");
 		%init(SP);
 	}
 	if (%c(PRSSharedParsecSession)) {
-		NSLog(@"Parsec on!!!");
+		NSLog(@"Parsec on");
 		%init(Parsec);
 	}
 	if (%c(CDDWatchKitAdmissionController)) {
-		NSLog(@"CDD on!!!");
+		NSLog(@"CDD on");
 		%init(coreduetd);
 	}
 	if (%c(PKDPlugIn) && [NSBundle.mainBundle.bundleIdentifier isEqualToString:@"com.apple.pkd"]) {
 		MSImageRef ref = MSGetImageByName("/usr/lib/system/libsystem_sandbox.dylib");
 		sandbox_extension_issue_file = (int (*)(const char *, const char *, int, int))MSFindSymbol(ref, "_sandbox_extension_issue_file");
-		NSLog(@"%d", sandbox_extension_issue_file != NULL);
+		//NSLog(@"%d", sandbox_extension_issue_file != NULL);
 		MSHookFunction(sandbox_extension_issue_file, MSHake(sandbox_extension_issue_file));
 	}
 }

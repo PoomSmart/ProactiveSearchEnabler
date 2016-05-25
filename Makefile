@@ -1,7 +1,8 @@
 GO_EASY_ON_ME = 1
 ARCHS = armv7 arm64
+DEBUG = 0
 
-include theos/makefiles/common.mk
+include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = ProactiveSearchEnabler
 ProactiveSearchEnabler_FILES = Tweak.xm
