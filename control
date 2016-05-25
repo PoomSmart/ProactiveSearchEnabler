@@ -3,6 +3,6 @@ Name: Spotlight Suggestions Enabler (Beta)
 Package: com.ps.proactivesearchenabler
 Version: 1.0
 Author: PoomSmart
-Pre-Depends: firmware (>= 9.0)
-Depends: mobilesubstrate
-Description: Spotlight Suggestions for unsupported devices ONLY.
+Depends: mobilesubstrate, firmware (>= 9.0)
+Description: For unsupported devices ONLY.
+Section: Tweaks
