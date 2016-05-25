@@ -6,3 +6,4 @@ Author: PoomSmart
 Depends: mobilesubstrate, firmware (>= 9.0)
 Description: For unsupported devices ONLY.
 Section: Tweaks
+Maintainer: PoomSmart
