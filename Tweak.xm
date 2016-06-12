@@ -31,33 +31,33 @@ MSHook(CFPropertyListRef, MGCopyAnswer, CFStringRef string)
 	return _MGCopyAnswer(string);
 }
 
-MSHook(Boolean, CFPreferencesGetAppBooleanValue, CFStringRef key, CFStringRef applicationID, Boolean *keyExistsAndHasValidFormat)
+/*MSHook(Boolean, CFPreferencesGetAppBooleanValue, CFStringRef key, CFStringRef applicationID, Boolean *keyExistsAndHasValidFormat)
 {
 	if (CFEqual(key, CFSTR("SpotlightIndexEnabled")))
 		return YES;
 	return _CFPreferencesGetAppBooleanValue(key, applicationID, keyExistsAndHasValidFormat);
-}
+}*/
 
-%hook NSUserDefaults
+/*%hook NSUserDefaults
 
 - (id)objectForKey:(NSString *)key
 {
-	/*if ([key isEqualToString:@"SPLogLevel"])
-		return @(8);*/
+	if ([key isEqualToString:@"SPLogLevel"])
+		return @(8);
 	if ([key isEqualToString:@"SpotlightIndexEnabled"])
 		return @(YES);
-	/*if ([key isEqualToString:@"SPDefaultSearch"])
-		return @(YES);*/
+	/f ([key isEqualToString:@"SPDefaultSearch"])
+		return @(YES);
 	return %orig;
 }
 
-%end
+%end*/
 
 %group SpringBoard
 
 %hook SPUISearchViewController
 
-- (void)loadView
+/*- (void)loadView
 {
 	%orig;
 	if ([self _shouldShowFirstTimeView])
@@ -67,7 +67,7 @@ MSHook(Boolean, CFPreferencesGetAppBooleanValue, CFStringRef key, CFStringRef ap
 - (BOOL)_shouldUpdateZKWContent:(BOOL)arg1
 {
 	return YES;
-}
+}*/
 
 %end
 
@@ -75,7 +75,7 @@ MSHook(Boolean, CFPreferencesGetAppBooleanValue, CFStringRef key, CFStringRef ap
 
 %group Parsec
 
-/*%hook PRSSharedParsecSession
+%hook PRSSharedParsecSession
 
 - (NSString *)userAgent
 {
@@ -84,7 +84,7 @@ MSHook(Boolean, CFPreferencesGetAppBooleanValue, CFStringRef key, CFStringRef ap
 	return r;
 }
 
-%end*/
+%end
 
 %end
 
@@ -146,7 +146,7 @@ MSHook(Boolean, CFPreferencesGetAppBooleanValue, CFStringRef key, CFStringRef ap
 
 %hook _DECDeviceInfo
 
-+ (BOOL)_isLowEndHardware
++ (BOOL)isLowEndHardware
 {
 	return NO;
 }
@@ -168,7 +168,7 @@ MSHook(int, sandbox_extension_issue_file, const char *ext, const char *path, int
 		dlopen("/System/Library/PreferenceBundles/SearchSettings.bundle/SearchSettings", RTLD_LAZY);
 	MSHookFunction(MGGetBoolAnswer, MSHake(MGGetBoolAnswer));
 	MSHookFunction(MGCopyAnswer, MSHake(MGCopyAnswer));
-	MSHookFunction(CFPreferencesGetAppBooleanValue, MSHake(CFPreferencesGetAppBooleanValue));
+	//MSHookFunction(CFPreferencesGetAppBooleanValue, MSHake(CFPreferencesGetAppBooleanValue));
 	if ([NSBundle.mainBundle.bundleIdentifier isEqualToString:@"com.apple.springboard"]) {
 		dlopen("/System/Library/PrivateFrameworks/SpotlightUI.framework/SpotlightUI", RTLD_LAZY);
 		%init(SpringBoard);

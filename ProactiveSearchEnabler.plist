@@ -5,13 +5,16 @@
 			searchd,
 			coreduetd,
 			suggestd,
-			pkd
+			pkd,
+			routined
 		);
 		Bundles = (
 			"com.apple.springboard",
 			"com.apple.Preferences",
 			"com.apple.news",
-			"com.apple.Parsec"
+			"com.apple.Parsec",
+			"com.apple.DuetExpertCenter",
+			"com.apple.CoreSuggestions"
 		);
 	};
 }
